@@ -37,3 +37,11 @@ void Weapon::InitBaseStats()
 	
 	*/
 }
+
+void Weapon::InitAddOptions()
+{
+    stats.addOptions[StatType::STR] =  {48, 60, 72, 84};
+    stats.addOptions[StatType::DEX] =  {48, 60, 72, 84};
+    stats.addOptions[StatType::LUK] =  {48, 60, 72, 84};
+    stats.addOptions[StatType::INT] =  {48, 60, 72, 84};
+}
