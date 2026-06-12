@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="소스 파일\메인">
+      <UniqueIdentifier>{97ec8c3d-b712-4424-bdad-676d7c4690fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\인터페이스">
+      <UniqueIdentifier>{02709ded-c277-44a2-ae4d-cda9ac132997}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\인터페이스">
+      <UniqueIdentifier>{bdb0faf6-21c7-4348-97eb-f2ae23d2441e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\메인">
+      <UniqueIdentifier>{604590a8-eceb-413b-acbb-5695c3b3b876}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\추가옵션">
+      <UniqueIdentifier>{7b2d8268-7d1d-46b2-8722-69fa601c6d71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\추가옵션">
+      <UniqueIdentifier>{7327b6ff-ba9b-4096-a40f-4245edc0695f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\메인 무기 정보">
+      <UniqueIdentifier>{937aaff5-543a-44e4-a085-65ab4fe1a756}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\메인 무기 정보/스탯타입">
+      <UniqueIdentifier>{c5926ed3-8ed6-4f54-9eb4-a4e3ba576262}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>소스 파일\메인</Filter>
+    </ClCompile>
+    <ClCompile Include="PrintW.cpp">
+      <Filter>소스 파일\인터페이스</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawBox.cpp">
+      <Filter>소스 파일\인터페이스</Filter>
+    </ClCompile>
+    <ClCompile Include="MainViewer.cpp">
+      <Filter>소스 파일\인터페이스</Filter>
+    </ClCompile>
+    <ClCompile Include="FlameStats.cpp">
+      <Filter>소스 파일\추가옵션</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>소스 파일\메인 무기 정보</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="메모.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PrintW.h">
+      <Filter>헤더 파일\인터페이스</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawBox.h">
+      <Filter>헤더 파일\인터페이스</Filter>
+    </ClInclude>
+    <ClInclude Include="MainViewer.h">
+      <Filter>헤더 파일\인터페이스</Filter>
+    </ClInclude>
+    <ClInclude Include="Main.h">
+      <Filter>헤더 파일\메인</Filter>
+    </ClInclude>
+    <ClInclude Include="FlameStats.h">
+      <Filter>헤더 파일\추가옵션</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>헤더 파일\메인 무기 정보/스탯타입</Filter>
+    </ClInclude>
+    <ClInclude Include="StatType.h">
+      <Filter>헤더 파일\메인 무기 정보/스탯타입</Filter>
+    </ClInclude>
+    <ClInclude Include="StatLIne.h">
+      <Filter>헤더 파일\인터페이스</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
