@@ -27,5 +27,13 @@ void Weapon::InitBaseStats()
     stats.baseStats[StatType::M_ATT] = 0;
     stats.baseStats[StatType::Damage] = 0;
     stats.baseStats[StatType::AllStat] = 0;
+
+
+ /*   stats.addOptions[StatType::AllStat] = {1,2,4,5,6};
+    vector<double> vec = { 1,2,4,5,6 };
+    stats.addOptions[StatType::AllStat][0];
+    vec[0] = 1;
+
 	
+	*/
 }

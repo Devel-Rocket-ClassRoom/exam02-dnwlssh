@@ -20,7 +20,7 @@ struct Option
 struct WeaponStats {
     // StatType을 키로 하여 수치를 저장 (기본 스탯 및 추가옵션 합산용)
     std::map<StatType, double> baseStats;
-    std::map<StatType, double> addOptions; // 현재 적용된 추가옵션
+    std::map<StatType, vector<double>> addOptions; // 현재 적용된 추가옵션
 
     // 잠재 및 에디셔널 (각 3줄)
     std::vector<Option> potential;

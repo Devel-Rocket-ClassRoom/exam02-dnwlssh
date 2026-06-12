@@ -17,8 +17,8 @@ public:
     void InitBaseStats();
 
     // 최종 스탯 계산 (기본 스탯 + 추가옵션) 후 반환
-    double GetTotalStat(StatType type) {
-        return stats.baseStats[type] + stats.addOptions[type];
+    double GetTotalStat(StatType type , int OptionLevel) {
+        return stats.baseStats[type] + stats.addOptions[type][OptionLevel];
     }
  
 };
