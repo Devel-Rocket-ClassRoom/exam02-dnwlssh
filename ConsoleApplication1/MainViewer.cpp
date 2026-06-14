@@ -12,6 +12,21 @@ double GetStatValueSafe(const std::map<StatType, double>& statMap, StatType type
     return 0.0; // 키가 존재하지 않으면 에러를 내지 않고 안전하게 0 반환
 }
 
+double GetStatValueSafe(const std::map<StatType, std::vector<double>>& statMap, StatType type)
+{
+    auto it = statMap.find(type);
+    if (it != statMap.end())
+    {
+        // vector 내부의 모든 요소(각 줄의 추가옵션 수치)를 더합니다.
+        double sum = 0.0;
+        for (double val : it->second) {
+            sum += val;
+        }
+        return sum;
+    }
+    return 0.0; // 추가옵션 줄이 아예 없다면 안전하게 0.0 반환
+}
+
 void RenderWeaponStats(int startX, int startY, const Weapon& weapon)
 {
     static const std::vector<StatLine> displayOrder = {

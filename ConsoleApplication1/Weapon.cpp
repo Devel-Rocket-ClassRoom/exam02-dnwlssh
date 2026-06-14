@@ -40,8 +40,25 @@ void Weapon::InitBaseStats()
 
 void Weapon::InitAddOptions()
 {
-    stats.addOptions[StatType::STR] =  {48, 60, 72, 84};
-    stats.addOptions[StatType::DEX] =  {48, 60, 72, 84};
-    stats.addOptions[StatType::LUK] =  {48, 60, 72, 84};
-    stats.addOptions[StatType::INT] =  {48, 60, 72, 84};
+    stats.addOptions[StatType::STR] = {48, 60, 72, 84};
+    stats.addOptions[StatType::DEX] = {48, 60, 72, 84};
+    stats.addOptions[StatType::LUK] = {48, 60, 72, 84};
+    stats.addOptions[StatType::INT] = {48, 60, 72, 84};
+
+    stats.addOptions[StatType::STR_DEX] = {26, 32, 39, 45};
+    stats.addOptions[StatType::STR_INT] = {26, 32, 39, 45};
+    stats.addOptions[StatType::STR_LUK] = {26, 32, 39, 45};
+    stats.addOptions[StatType::DEX_INT] = {26, 32, 39, 45};
+    stats.addOptions[StatType::DEX_LUK] = {26, 32, 39, 45};
+    stats.addOptions[StatType::INT_LUK] = {26, 32, 39, 45};
+
+    stats.addOptions[StatType::MaxHP] = {1080, 1480, 1950, 2500};
+    stats.addOptions[StatType::MaxMP] = {1080, 1480, 1950, 2500};
+    stats.addOptions[StatType::ReqLevel] = {20, 25, 30, 35};
+    stats.addOptions[StatType::DEF] = {24, 32, 40, 48};
+    stats.addOptions[StatType::ATT] = {59, 81, 106, 136};
+    stats.addOptions[StatType::M_ATT] = {59, 81, 106, 136};
+    stats.addOptions[StatType::BossDMG] = {8, 10, 12, 14};
+    stats.addOptions[StatType::Damage] = {4, 5, 6, 7};
+    stats.addOptions[StatType::AllStat] = {4, 5, 6, 7};
 }
