@@ -61,7 +61,7 @@
       <Filter>소스 파일\메인 무기 정보</Filter>
     </ClCompile>
     <ClCompile Include="StatLine.cpp">
-      <Filter>소스 파일\인터페이스</Filter>
+      <Filter>소스 파일\추가옵션</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -89,9 +89,6 @@
     <ClInclude Include="StatType.h">
       <Filter>헤더 파일\메인 무기 정보/스탯타입</Filter>
     </ClInclude>
-    <ClInclude Include="StatLIne.h">
-      <Filter>헤더 파일\인터페이스</Filter>
-    </ClInclude>
     <ClInclude Include="잠재능력 확률표.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -103,6 +100,9 @@
     </ClInclude>
     <ClInclude Include="AdditionalData.h">
       <Filter>헤더 파일\잠재능력</Filter>
+    </ClInclude>
+    <ClInclude Include="StatLIne.h">
+      <Filter>헤더 파일\추가옵션</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

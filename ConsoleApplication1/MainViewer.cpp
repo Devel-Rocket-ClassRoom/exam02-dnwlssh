@@ -183,7 +183,7 @@ void MainViewer(const Weapon& weapon)
     printW(19, 11, L"고유 아이템,교환 불가");
 
     // 3. 점자 아트를 배열로 분리하여 줄바꿈 오작동 방지
-    const wchar_t* monster[] = {
+    const wchar_t* WeaponView[] = {
         L"⣿⣿⣿⡏⠀⠀⢹⣿⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿",
         L"⣿⡟⠁⠀⠀⣤⠀⠀⡤⠤⣞⠛⠻⢿⣿⣿⣿⣿",
         L"⡟⠃⠀⠀⡆⠘⡯⣽⡮⣵⢋⣴⡿⠃⠙⣿⣿⣿",
@@ -199,7 +199,7 @@ void MainViewer(const Weapon& weapon)
     int startX = 4;
     int startY = 12;
     for (int i = 0; i < 9; i++) {
-        printW(startX, startY + i, monster[i]);
+        printW(startX, startY + i, WeaponView[i]);
     }
     printW(43, 12, L"공력력 증가량");
     printW(23, 18, L"◾REQ LEV : 250");
