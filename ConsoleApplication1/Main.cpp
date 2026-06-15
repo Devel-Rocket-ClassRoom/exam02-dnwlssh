@@ -52,7 +52,7 @@ int main()
            else if (input == 4) {
                std::wstring filename = L"WeaponSpec.txt";
                if (MyWeapon.SaveToFile(filename)) {
-                   printW(2, 57, L"현재 무기 스펙이 'WeaponSpec.txt'로 저장되었습니다.");
+                   printW(2, 66, L"현재 무기 스펙이 'WeaponSpec.txt'로 저장되었습니다.");
                }
                else {
                    printW(2, 57, L"파일 저장 중 오류가 발생했습니다.");
@@ -63,7 +63,7 @@ int main()
            else if (input == 5) {
                std::wstring filename = L"WeaponSpec.txt";
                if (MyWeapon.LoadFromFile(filename)) {
-                   printW(2, 57, L"'WeaponSpec.txt'로부터 스펙을 성공적으로 불러왔습니다.");
+                   printW(2, 66, L"'WeaponSpec.txt'로부터 스펙을 성공적으로 불러왔습니다.");
                }
                else {
                    printW(2, 57, L"저장된 파일이 없거나 불러오기에 실패했습니다.");
@@ -87,6 +87,8 @@ int main()
                // 임시로 옵션을 돌리기 위해 MyWeapon을 가챠 머신으로 활용합니다.
                MyWeapon.RollAdditionalOptions();
 
+               // 원본에서 증가한 카운트와 데이터를 임시 저장소에 실시간 동기화
+               tempGachaStats.blackFlameCount = MyWeapon.GetStats().blackFlameCount;
                // 새로 롤링된 무기 데이터를 임시 보관함에 빼내어 저장 (화면에 보여줄 용도)
                tempGachaStats.addOptions = MyWeapon.GetStats().addOptions;
            }
@@ -95,6 +97,9 @@ int main()
                // 2. 현재 추가옵션 선택(확정) 눌렀을 시
                // 마지막으로 가챠 성공해서 tempGachaStats에 들어있는 추가옵션 데이터를 원본 무기에 덮어쓰기
                MyWeapon.GetStats().addOptions = tempGachaStats.addOptions;
+
+               // 최종 적용 시 최종 카운트 확정 동기화
+               MyWeapon.GetStats().blackFlameCount = tempGachaStats.blackFlameCount;
             
                printW(2, 27, L"추가옵션이 무기에 성공적으로 적용되었습니다!");
                Sleep(1200);
@@ -118,11 +123,17 @@ int main()
            if (gachaInput == 1) {
                // 1. 잠재능력 독립 가챠 무작위 실행
                MyWeapon.RollPotential();
+               // 원본에서 증가한 블랙 큐브 카운트와 옵션을 임시 저장소에 실시간 동기화
+               tempGachaStats.blackCubeCount = MyWeapon.GetStats().blackCubeCount;
                tempGachaStats.potential = MyWeapon.GetStats().potential;
            }
            else if (gachaInput == 2) {
                // 2. 현재 옵션 최종 적용 후 메인화면 이전
                MyWeapon.GetStats().potential = tempGachaStats.potential;
+
+               // 최종 적용 시 큐브 카운트 확정 동기화
+               MyWeapon.GetStats().blackCubeCount = tempGachaStats.blackCubeCount;
+             
                printW(2, 24, L"잠재능력이 무기에 성공적으로 각인되었습니다.");
                Sleep(1000);
                pageState = 0;
@@ -142,10 +153,18 @@ int main()
 
            if (gachaInput == 1) {
                MyWeapon.RollAdditionalPotential();
+
+               // 원본에서 증가한 에디셔널 큐브 카운트와 옵션을 임시 저장소에 실시간 동기화
+               tempGachaStats.addCubeCount = MyWeapon.GetStats().addCubeCount;
+
                tempGachaStats.additionalPotential = MyWeapon.GetStats().additionalPotential;
            }
            else if (gachaInput == 2) {
                MyWeapon.GetStats().additionalPotential = tempGachaStats.additionalPotential;
+
+               // 최종 적용 시 에디셔널 큐브 카운트 확정 동기화
+               MyWeapon.GetStats().addCubeCount = tempGachaStats.addCubeCount;
+
                printW(2, 24, L"에디셔널 잠재능력이 성공적으로 적용되었습니다.");
                Sleep(1000);
                pageState = 0;

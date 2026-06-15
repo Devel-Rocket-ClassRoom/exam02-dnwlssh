@@ -250,9 +250,6 @@ bool Weapon::SaveToFile(const std::wstring& filename) const {
         outFile << static_cast<int>(opt.Type) << L" " << opt.Value << L" " << opt.OptionName << L"\n";
     }
 
-    // 5. 소모품 카운터 섹션 추가 저장
-    outFile << L"[CubeCounters]\n";
-    outFile << stats.blackFlameCount << L" " << stats.blackCubeCount << L" " << stats.addCubeCount << L"\n";
 
     outFile.close();
     return true;
@@ -306,6 +303,7 @@ bool Weapon::LoadFromFile(const std::wstring& filename) {
                 stats.addOptions[static_cast<StatType>(typeInt)] = vals;
             }
         }
+  
         else if (currentSection == L"[Potential]" || currentSection == L"[AdditionalPotential]") {
             // 해당 섹션의 첫 라인은 개수이므로 숫자가 하나만 들어옵니다.
             if (line.find(L" ") == std::wstring::npos) continue;
@@ -333,10 +331,6 @@ bool Weapon::LoadFromFile(const std::wstring& filename) {
             else {
                 stats.additionalPotential.push_back(opt);
             }
-        }
-        // 카운터 세션 파싱 역대입
-        if (currentSection == L"[CubeCounters]") {
-            ss >> stats.blackFlameCount >> stats.blackCubeCount >> stats.addCubeCount;
         }
     }
     inFile.close();
