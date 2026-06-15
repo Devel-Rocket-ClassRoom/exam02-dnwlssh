@@ -24,5 +24,11 @@ struct WeaponStats {
     // 잠재 및 에디셔널 (각 3줄)
     std::vector<Option> potential;
     std::vector<Option> additionalPotential;
+
+
+    // 소모품 카운터 변수
+    int blackFlameCount = 0;   // 사용한 검은 환생의 불꽃 개수
+    int blackCubeCount = 0;    // 사용한 블랙 큐브 개수
+    int addCubeCount = 0;      // 사용한 에디셔널 큐브 개수
 };
 

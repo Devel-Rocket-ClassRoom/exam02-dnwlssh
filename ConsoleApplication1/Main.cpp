@@ -3,7 +3,7 @@
 int main() 
 {
    // 콘솔 창 크기 조절 및 제목 설정
-   system("mode con cols=70 lines=120");
+   system("mode con cols=95 lines=120");
    
    Weapon MyWeapon;
 

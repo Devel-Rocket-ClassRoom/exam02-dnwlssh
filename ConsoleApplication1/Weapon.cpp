@@ -140,6 +140,7 @@ void Weapon::RollAdditionalOptions()
             stats.addOptions[rolledType].push_back(value);
         }
     }
+    stats.blackFlameCount++;
 }
 // ------------------------------잠재능력---------------------------------
 Option PickOptionFromPool(const std::vector<PotentialRow>& pool) {
@@ -172,6 +173,8 @@ void Weapon::RollPotential() {
     stats.potential.push_back(PickOptionFromPool(PotentialData::GetFirstPool()));
     stats.potential.push_back(PickOptionFromPool(PotentialData::GetSecondPool()));
     stats.potential.push_back(PickOptionFromPool(PotentialData::GetThirdPool()));
+
+    stats.blackCubeCount++;
 }
 
 
@@ -203,6 +206,8 @@ void Weapon::RollAdditionalPotential() {
     stats.additionalPotential.push_back(PickOptionFromAdditionalPool(AdditionalData::GetFirstPool()));
     stats.additionalPotential.push_back(PickOptionFromAdditionalPool(AdditionalData::GetSecondPool()));
     stats.additionalPotential.push_back(PickOptionFromAdditionalPool(AdditionalData::GetThirdPool()));
+
+    stats.addCubeCount++;
 }
 
 
@@ -212,7 +217,7 @@ bool Weapon::SaveToFile(const std::wstring& filename) const {
     std::wofstream outFile(filename);
     if (!outFile.is_open()) return false;
 
-  // 표준 기본 생성자
+    // 표준 기본 생성자
     outFile.imbue(std::locale(std::locale(), new std::codecvt_utf8<wchar_t>));
 
     // 1. 기본 스탯 저장 (baseStats)
@@ -245,6 +250,10 @@ bool Weapon::SaveToFile(const std::wstring& filename) const {
         outFile << static_cast<int>(opt.Type) << L" " << opt.Value << L" " << opt.OptionName << L"\n";
     }
 
+    // 5. 소모품 카운터 섹션 추가 저장
+    outFile << L"[CubeCounters]\n";
+    outFile << stats.blackFlameCount << L" " << stats.blackCubeCount << L" " << stats.addCubeCount << L"\n";
+
     outFile.close();
     return true;
 }
@@ -262,7 +271,8 @@ bool Weapon::LoadFromFile(const std::wstring& filename) {
     stats.addOptions.clear();
     stats.potential.clear();
     stats.additionalPotential.clear();
-
+     
+    // 기존 세션 별 파싱
     std::wstring line;
     std::wstring currentSection = L"";
 
@@ -324,8 +334,11 @@ bool Weapon::LoadFromFile(const std::wstring& filename) {
                 stats.additionalPotential.push_back(opt);
             }
         }
+        // 카운터 세션 파싱 역대입
+        if (currentSection == L"[CubeCounters]") {
+            ss >> stats.blackFlameCount >> stats.blackCubeCount >> stats.addCubeCount;
+        }
     }
-
     inFile.close();
     return true;
 }

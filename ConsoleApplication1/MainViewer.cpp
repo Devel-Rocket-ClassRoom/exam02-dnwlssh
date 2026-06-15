@@ -254,6 +254,21 @@ void MainViewer(const Weapon& weapon)
         for (const auto& opt : addPList) printW(4, apy++, (L"  - " + opt.OptionName).c_str());
     }
 
+
+    DrawBox(59, 2, 32, 10); // 우측 상단 배치
+    printW(61, 3, L"[ 사용된 재화 ]");
+
+    const WeaponStats& ws = weapon.GetStats();
+
+    // 숫자를 문자열로 안전하게 조합하여 출력하기 위해 std::wstring 생성
+    std::wstring flameStr = L"• 검은 환생의 불꽃  : " + std::to_wstring(ws.blackFlameCount) + L" 개";
+    std::wstring cubeStr = L"• 블랙 큐브         : " + std::to_wstring(ws.blackCubeCount) + L" 개";
+    std::wstring addStr = L"• 에디셔널 큐브     : " + std::to_wstring(ws.addCubeCount) + L" 개";
+
+    printW(61, 5, flameStr.c_str());
+    printW(61, 7, cubeStr.c_str());
+    printW(61, 9, addStr.c_str());
+
     DrawBottomTabs();
 }
 
