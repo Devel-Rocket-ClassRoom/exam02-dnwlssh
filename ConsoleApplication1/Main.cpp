@@ -29,7 +29,7 @@ int main()
            MainViewer(MyWeapon); // 메인 UI 렌더링
 
            // 입력 유도 문자 위치 지정
-           printW(2, 57, L"원하는 메뉴의 번호를 입력하세요: ");
+           printW(2, 60, L"원하는 메뉴의 번호를 입력하세요: ");
            int input;
            std::cin >> input;
 
@@ -48,6 +48,29 @@ int main()
                tempGachaStats.additionalPotential = MyWeapon.GetStats().additionalPotential;
                pageState = 3;
            }
+           // 파일 저장 처리 행렬
+           else if (input == 4) {
+               std::wstring filename = L"WeaponSpec.txt";
+               if (MyWeapon.SaveToFile(filename)) {
+                   printW(2, 57, L"현재 무기 스펙이 'WeaponSpec.txt'로 저장되었습니다.");
+               }
+               else {
+                   printW(2, 57, L"파일 저장 중 오류가 발생했습니다.");
+               }
+               Sleep(1500);
+           }
+           // 파일 로드 처리 행렬
+           else if (input == 5) {
+               std::wstring filename = L"WeaponSpec.txt";
+               if (MyWeapon.LoadFromFile(filename)) {
+                   printW(2, 57, L"'WeaponSpec.txt'로부터 스펙을 성공적으로 불러왔습니다.");
+               }
+               else {
+                   printW(2, 57, L"저장된 파일이 없거나 불러오기에 실패했습니다.");
+               }
+               Sleep(1500);
+           }
+
        }
        else if (pageState == 1) // [1: 추가옵션 설정 페이지 루프]
        {

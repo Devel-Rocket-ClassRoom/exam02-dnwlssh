@@ -2,10 +2,10 @@
 #include "PotentialData.h"
 #include "AdditionalData.h"
 
-#include <cstdlib>
-#include <ctime>
-#include <vector>
-#include <algorithm>
+#include <fstream>
+#include <codecvt>
+#include <locale>
+#include <sstream>
 
 Weapon::Weapon() 
 {
@@ -203,4 +203,129 @@ void Weapon::RollAdditionalPotential() {
     stats.additionalPotential.push_back(PickOptionFromAdditionalPool(AdditionalData::GetFirstPool()));
     stats.additionalPotential.push_back(PickOptionFromAdditionalPool(AdditionalData::GetSecondPool()));
     stats.additionalPotential.push_back(PickOptionFromAdditionalPool(AdditionalData::GetThirdPool()));
+}
+
+
+//저장
+bool Weapon::SaveToFile(const std::wstring& filename) const {
+    // 유니코드(UTF-8/UTF-16) 저장을 위한 설정
+    std::wofstream outFile(filename);
+    if (!outFile.is_open()) return false;
+
+  // 표준 기본 생성자
+    outFile.imbue(std::locale(std::locale(), new std::codecvt_utf8<wchar_t>));
+
+    // 1. 기본 스탯 저장 (baseStats)
+    outFile << L"[BaseStats]\n";
+    for (const auto& pair : stats.baseStats) {
+        outFile << static_cast<int>(pair.first) << L" " << pair.second << L"\n";
+    }
+
+    // 2. 추가옵션 저장 (addOptions)
+    outFile << L"[AddOptions]\n";
+    for (const auto& pair : stats.addOptions) {
+        outFile << static_cast<int>(pair.first) << L" " << pair.second.size();
+        for (double val : pair.second) {
+            outFile << L" " << val;
+        }
+        outFile << L"\n";
+    }
+
+    // 3. 잠재능력 저장 (potential)
+    outFile << L"[Potential]\n";
+    outFile << stats.potential.size() << L"\n";
+    for (const auto& opt : stats.potential) {
+        outFile << static_cast<int>(opt.Type) << L" " << opt.Value << L" " << opt.OptionName << L"\n";
+    }
+
+    // 4. 에디셔널 잠재능력 저장 (additionalPotential)
+    outFile << L"[AdditionalPotential]\n";
+    outFile << stats.additionalPotential.size() << L"\n";
+    for (const auto& opt : stats.additionalPotential) {
+        outFile << static_cast<int>(opt.Type) << L" " << opt.Value << L" " << opt.OptionName << L"\n";
+    }
+
+    outFile.close();
+    return true;
+}
+
+// 로드
+bool Weapon::LoadFromFile(const std::wstring& filename) {
+    std::wifstream inFile(filename);
+    if (!inFile.is_open()) return false;
+
+    //표준 기본 생성자
+    inFile.imbue(std::locale(std::locale(), new std::codecvt_utf8<wchar_t>));
+
+    // 기존 데이터 초기화
+    stats.baseStats.clear();
+    stats.addOptions.clear();
+    stats.potential.clear();
+    stats.additionalPotential.clear();
+
+    std::wstring line;
+    std::wstring currentSection = L"";
+
+    while (std::getline(inFile, line)) {
+        if (line.empty()) continue;
+
+        // 섹션 확인
+        if (line == L"[BaseStats]" || line == L"[AddOptions]" || line == L"[Potential]" || line == L"[AdditionalPotential]") {
+            currentSection = line;
+            continue;
+        }
+
+        std::wstringstream ss(line);
+
+        if (currentSection == L"[BaseStats]") {
+            int typeInt;
+            double value;
+            if (ss >> typeInt >> value) {
+                stats.baseStats[static_cast<StatType>(typeInt)] = value;
+            }
+        }
+        else if (currentSection == L"[AddOptions]") {
+            int typeInt;
+            size_t count;
+            if (ss >> typeInt >> count) {
+                std::vector<double> vals;
+                double val;
+                for (size_t i = 0; i < count; ++i) {
+                    if (ss >> val) vals.push_back(val);
+                }
+                stats.addOptions[static_cast<StatType>(typeInt)] = vals;
+            }
+        }
+        else if (currentSection == L"[Potential]" || currentSection == L"[AdditionalPotential]") {
+            // 해당 섹션의 첫 라인은 개수이므로 숫자가 하나만 들어옵니다.
+            if (line.find(L" ") == std::wstring::npos) continue;
+
+            int typeInt;
+            double value;
+            ss >> typeInt >> value;
+
+            // 나머지 문자열 전체를 OptionName으로 파싱 (공백 포함 공정 처리)
+            std::wstring optionName;
+            std::wstring temp;
+            while (ss >> temp) {
+                if (!optionName.empty()) optionName += L" ";
+                optionName += temp;
+            }
+
+            Option opt;
+            opt.Type = static_cast<StatType>(typeInt);
+            opt.Value = value;
+            opt.OptionName = optionName;
+
+            if (currentSection == L"[Potential]") {
+                stats.potential.push_back(opt);
+            }
+            else {
+                stats.additionalPotential.push_back(opt);
+            }
+        }
+    }
+
+    inFile.close();
+    return true;
 }

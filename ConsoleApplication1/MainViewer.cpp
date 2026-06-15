@@ -73,8 +73,9 @@ void RenderWeaponStats(int startX, int startY, const Weapon& weapon)
 void DrawBottomTabs()
 {
     // Y=42 위치에 메뉴 상자 생성
-    DrawBox(2, 54, 55, 3);
-    printW(4, 55, L"1. 추가옵션   2. 잠재능력   3. 에디셔널 잠재능력");
+    DrawBox(2, 55, 55, 4);
+    printW(4, 56, L"1. 추가옵션  2. 잠재능력   3. 에디셔널 잠재능력");
+    printW(4, 57, L"4. 스펙 저장  5. 스펙 불러오기");
 }
 
 //------------------------------------------추가옵션-----------------------------------------------//
@@ -217,36 +218,39 @@ void MainViewer(const Weapon& weapon)
 
     // ------------------------------- 잠재능력---------------------------------
     // 잠재 능력 탭 추가
-    DrawBox(2, 41, 55, 6); // 잠재능력 박스
+    DrawBox(2, 41, 55, 7); // 잠재능력 박스
 
     // 등급 마크 강조 출력
-    printW(4, 42, L" 잠재능력 설정 [ 레전더리 등급 ]");
+    printW(4, 42, L"잠재능력 설정");
+    printW(4, 43, L"[ 레전더리 등급 ]");
 
     const auto& pList = weapon.GetStats().potential;
  
     // 만약 잠재능력이 아직 재설정되지 않은 초기 상태라면 안내 텍스트 출력
     if (pList.empty()) {
-        printW(4, 43, L"  - 잠재옵션이 존재하지 않습니다.");
-        printW(4, 44, L"  - 하단 메뉴에서 잠재능력을 재설정해 주세요.");
+        printW(4, 44, L"  - 잠재옵션이 존재하지 않습니다.");
+        printW(4, 45, L"  - 잠재능력을 재설정해 주세요.");
     }
     else {
         // 확정 설정된 3줄의 옵션을 차례대로 출력
-        int startY = 43;
+        int startY = 44;
         for (const auto& opt : pList) {
-            // 한글 깨짐이 완벽히 해결된 wstring 데이터를 그대로 출력합니다.
             printW(4, startY++, (L"  - " + opt.OptionName).c_str());
         }
     }
 
     // ------------------------------- 에디셔널---------------------------------
-    DrawBox(2, 47, 55, 6);
-    printW(4, 48, L" 에디셔널 잠재능력 설정 [ 레전더리 등급 ]");
+    DrawBox(2, 48, 55, 7);
+    printW(4, 49, L" 에디셔널 잠재능력 설정");
+    printW(4, 50, L" [ 레전더리 등급 ]");
+
     const std::vector<Option>& addPList = weapon.GetStats().additionalPotential;
     if (addPList.empty()) {
-        printW(4, 49, L"  - 에디셔널 옵션이 존재하지 않습니다.");
+        printW(4, 51, L"  - 에디셔널 옵션이 존재하지 않습니다.");
+        printW(4, 52, L"  - 에디셔널 잠재능력을 재설정해 주세요.");
     }
     else {
-        int apy = 50;
+        int apy = 51;
         for (const auto& opt : addPList) printW(4, apy++, (L"  - " + opt.OptionName).c_str());
     }
 

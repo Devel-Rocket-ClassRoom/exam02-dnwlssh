@@ -22,5 +22,9 @@ public:
     const WeaponStats& GetStats() const{ return stats; }
     // 읽기/쓰기 가능 변경용 (일반 객체용 참조 반환)
     WeaponStats& GetStats() { return stats; }
+
+    // 파일 저장 및 불러오기
+    bool SaveToFile(const std::wstring& filename) const;
+    bool LoadFromFile(const std::wstring& filename);
 };
 
