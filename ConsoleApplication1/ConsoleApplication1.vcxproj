@@ -133,15 +133,18 @@
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AdditionalData.h" />
     <ClInclude Include="DrawBox.h" />
     <ClInclude Include="FlameStats.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="MainViewer.h" />
+    <ClInclude Include="PotentialData.h" />
     <ClInclude Include="PrintW.h" />
     <ClInclude Include="StatLIne.h" />
     <ClInclude Include="StatType.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="메모.h" />
+    <ClInclude Include="에디셔널 잠재능력 확률표.h" />
     <ClInclude Include="잠재능력 확률표.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,6 +1,6 @@
 ﻿#include "Weapon.h"   
 #include "StatLine.h" 
-
+#include "MainViewer.h"
 
 //모두 추가옵션이 생성되었을 떄, 줄을 생성하고 그렇지 않으면 줄을 생성하지 않는다
 double GetStatValueSafe(const std::map<StatType, double>& statMap, StatType type)
@@ -68,14 +68,16 @@ void RenderWeaponStats(int startX, int startY, const Weapon& weapon)
     printW(startX, 39, L"강화불가");
 }
 
+
 // 메뉴 탭 함수
 void DrawBottomTabs()
 {
     // Y=42 위치에 메뉴 상자 생성
-    DrawBox(2, 42, 55, 5);
-    printW(4, 44, L"1. 추가옵션   2. 잠재능력   3. 에디셔널 잠재능력");
+    DrawBox(2, 54, 55, 3);
+    printW(4, 55, L"1. 추가옵션   2. 잠재능력   3. 에디셔널 잠재능력");
 }
 
+//------------------------------------------추가옵션-----------------------------------------------//
 // 추가옵션 전용 페이지 화면 구현
 // tempStats: 가챠 도중 실시간으로 바뀔 임시 추가옵션 상태를 보여주기 위함
 void FlameOptionPage(Weapon& weapon, const WeaponStats& tempStats)
@@ -88,7 +90,7 @@ void FlameOptionPage(Weapon& weapon, const WeaponStats& tempStats)
     printW(4, 3, L"무기분류 : 아대(두손무기)");
     printW(4, 4, L"공격속도 : 빠름(6단계)");
 
-    // 💡 현재 무기가 가진 오리지널 기본 스탯(baseStats)과 
+    // 현재 무기가 가진 오리지널 기본 스탯(baseStats)과 
     // 매개변수로 전달받은 가챠 진행 중인 임시 추가옵션(tempStats.addOptions)을 조합하여 화면에 동적 출력
     int currentY = 5;
 
@@ -125,6 +127,50 @@ void FlameOptionPage(Weapon& weapon, const WeaponStats& tempStats)
     printW(4, 22, L"1. 재설정하기  2. 현재 옵션 선택(적용)  3. 이전으로");
 }
 
+//------------------------------------------잠재능력-----------------------------------------------//
+//잠재능력 설정용 전용 UI 페이지
+void PotentialPage(Weapon& weapon, const WeaponStats& tempStats) {
+    system("cls");
+    DrawBox(2, 2, 55, 8);
+    printW(4, 4, L"[현재 잠재능력 등급 : 레전더리]");
+
+    int py = 6;
+    if (tempStats.potential.empty()) {
+        printW(6, py, L"옵션이 아직 설정되지 않았습니다.");
+    }
+    else {
+        for (const auto& opt : tempStats.potential) {
+            printW(6, py++, opt.OptionName.c_str());
+        }
+    }
+
+    DrawBox(2, 15, 55, 6);
+    printW(4, 17, L"[잠재능력 설정 모드]");
+    printW(4, 19, L"1. 재설정하기  2. 현재 옵션 선택(적용)  3. 이전으로");
+}
+
+//------------------------------------------에디셔널-----------------------------------------------//
+void AdditionalPotentialPage(Weapon& weapon, const WeaponStats& tempStats) {
+    system("cls");
+    DrawBox(2, 2, 55, 8);
+    printW(4, 4, L"[현재 에디셔널 잠재능력 등급 : 레전더리]");
+
+    int py = 6;
+    if (tempStats.additionalPotential.empty()) {
+        printW(6, py, L"옵션이 아직 설정되지 않았습니다.");
+    }
+    else {
+        for (const auto& opt : tempStats.additionalPotential) {
+            printW(6, py++, opt.OptionName.c_str());
+        }
+    }
+
+    DrawBox(2, 15, 55, 6);
+    printW(4, 17, L"[에디셔널 잠재능력 설정 모드]");
+    printW(4, 19, L"1. 재설정하기  2. 현재 옵션 선택(적용)  3. 이전으로");
+}
+
+//메인 뷰어
 void MainViewer(const Weapon& weapon)
 {
     //[메인 화면] 창 틀 생성
@@ -165,7 +211,44 @@ void MainViewer(const Weapon& weapon)
     DrawBox(2, 26, 55, 15);
     printW(4, 27, L"무기분류 : 아대(두손무기)");
     printW(4, 28, L"공격속도 : 빠름(6단계)");
+
+    // 추가옵션 설정
     RenderWeaponStats(4, 29, weapon);
+
+    // ------------------------------- 잠재능력---------------------------------
+    // 잠재 능력 탭 추가
+    DrawBox(2, 41, 55, 6); // 잠재능력 박스
+
+    // 등급 마크 강조 출력
+    printW(4, 42, L" 잠재능력 설정 [ 레전더리 등급 ]");
+
+    const auto& pList = weapon.GetStats().potential;
+ 
+    // 만약 잠재능력이 아직 재설정되지 않은 초기 상태라면 안내 텍스트 출력
+    if (pList.empty()) {
+        printW(4, 43, L"  - 잠재옵션이 존재하지 않습니다.");
+        printW(4, 44, L"  - 하단 메뉴에서 잠재능력을 재설정해 주세요.");
+    }
+    else {
+        // 확정 설정된 3줄의 옵션을 차례대로 출력
+        int startY = 43;
+        for (const auto& opt : pList) {
+            // 한글 깨짐이 완벽히 해결된 wstring 데이터를 그대로 출력합니다.
+            printW(4, startY++, (L"  - " + opt.OptionName).c_str());
+        }
+    }
+
+    // ------------------------------- 에디셔널---------------------------------
+    DrawBox(2, 47, 55, 6);
+    printW(4, 48, L" 에디셔널 잠재능력 설정 [ 레전더리 등급 ]");
+    const std::vector<Option>& addPList = weapon.GetStats().additionalPotential;
+    if (addPList.empty()) {
+        printW(4, 49, L"  - 에디셔널 옵션이 존재하지 않습니다.");
+    }
+    else {
+        int apy = 50;
+        for (const auto& opt : addPList) printW(4, apy++, (L"  - " + opt.OptionName).c_str());
+    }
 
     DrawBottomTabs();
 }

@@ -1,4 +1,7 @@
 ﻿#include "Weapon.h"
+#include "PotentialData.h"
+#include "AdditionalData.h"
+
 #include <cstdlib>
 #include <ctime>
 #include <vector>
@@ -40,33 +43,6 @@ void Weapon::InitBaseStats()
     stats.baseStats[StatType::AllStat] = 0;
 
 }
-
-// 출현 범위 설정
-void Weapon::InitAddOptions()
-{
-    stats.addOptions[StatType::STR] = {48, 60, 72, 84};
-    stats.addOptions[StatType::DEX] = {48, 60, 72, 84};
-    stats.addOptions[StatType::LUK] = {48, 60, 72, 84};
-    stats.addOptions[StatType::INT] = {48, 60, 72, 84};
-
-    stats.addOptions[StatType::STR_DEX] = {26, 32, 39, 45};
-    stats.addOptions[StatType::STR_INT] = {26, 32, 39, 45};
-    stats.addOptions[StatType::STR_LUK] = {26, 32, 39, 45};
-    stats.addOptions[StatType::DEX_INT] = {26, 32, 39, 45};
-    stats.addOptions[StatType::DEX_LUK] = {26, 32, 39, 45};
-    stats.addOptions[StatType::INT_LUK] = {26, 32, 39, 45};
-
-    stats.addOptions[StatType::MaxHP] = {1080, 1480, 1950, 2500};
-    stats.addOptions[StatType::MaxMP] = {1080, 1480, 1950, 2500};
-    stats.addOptions[StatType::ReqLevel] = {20, 25, 30, 35};
-    stats.addOptions[StatType::DEF] = {24, 32, 40, 48};
-    stats.addOptions[StatType::ATT] = {59, 81, 106, 136};
-    stats.addOptions[StatType::M_ATT] = {59, 81, 106, 136};
-    stats.addOptions[StatType::BossDMG] = {8, 10, 12, 14};
-    stats.addOptions[StatType::Damage] = {4, 5, 6, 7};
-    stats.addOptions[StatType::AllStat] = {4, 5, 6, 7};
-}
-
 
 void Weapon::RollAdditionalOptions() 
 {
@@ -164,4 +140,67 @@ void Weapon::RollAdditionalOptions()
             stats.addOptions[rolledType].push_back(value);
         }
     }
+}
+// ------------------------------잠재능력---------------------------------
+Option PickOptionFromPool(const std::vector<PotentialRow>& pool) {
+    double totalWeight = 0;
+    for (const auto& row : pool) totalWeight += row.weight;
+
+    double randVal = (static_cast<double>(rand()) / RAND_MAX) * totalWeight;
+
+    double currentSum = 0;
+    for (const auto& row : pool) {
+        currentSum += row.weight;
+        if (randVal <= currentSum) {
+            Option opt;
+            opt.Type = row.type;
+            opt.Value = row.value;
+
+            // 유니코드(wstring) 그대로 바로 대입
+            opt.OptionName = row.name;
+
+            return opt;
+        }
+    }
+    return Option();
+}
+
+void Weapon::RollPotential() {
+    stats.potential.clear();
+
+    // 첫 번째, 두 번째, 세 번째 옵션 풀에서 독립적으로 각각 1줄씩 가챠 생성
+    stats.potential.push_back(PickOptionFromPool(PotentialData::GetFirstPool()));
+    stats.potential.push_back(PickOptionFromPool(PotentialData::GetSecondPool()));
+    stats.potential.push_back(PickOptionFromPool(PotentialData::GetThirdPool()));
+}
+
+
+// ------------------------------에디셔널---------------------------------
+Option PickOptionFromAdditionalPool(const std::vector<AdditionalRow>& pool) {
+    double totalWeight = 0;
+    for (const auto& row : pool) totalWeight += row.weight;
+
+    double randVal = (static_cast<double>(rand()) / RAND_MAX) * totalWeight;
+    double currentSum = 0;
+
+    for (const auto& row : pool) {
+        currentSum += row.weight;
+        if (randVal <= currentSum) {
+            Option opt;
+            opt.Type = row.type;
+            opt.Value = row.value;
+            opt.OptionName = row.name; // 한글 깨짐 없는 wstring 대입
+            return opt;
+        }
+    }
+    return Option();
+}
+
+void Weapon::RollAdditionalPotential() {
+    stats.additionalPotential.clear();
+
+    // 1, 2, 3번째 줄을 독립 확률 테이블 풀에서 무작위 추출
+    stats.additionalPotential.push_back(PickOptionFromAdditionalPool(AdditionalData::GetFirstPool()));
+    stats.additionalPotential.push_back(PickOptionFromAdditionalPool(AdditionalData::GetSecondPool()));
+    stats.additionalPotential.push_back(PickOptionFromAdditionalPool(AdditionalData::GetThirdPool()));
 }

@@ -3,7 +3,7 @@
 int main() 
 {
    // 콘솔 창 크기 조절 및 제목 설정
-   system("mode con cols=70 lines=70");
+   system("mode con cols=70 lines=120");
    
    Weapon MyWeapon;
 
@@ -13,9 +13,6 @@ int main()
 
    // 가챠 도중 "이전 옵션"과 "새 옵션"을 비교하거나 임시 저장해둘 임시 구조체
 	WeaponStats tempGachaStats;
-
-   //추가옵션 무작위 롤링 실행 (기본 스탯에 추가옵션이 누적됨!)
-   MyWeapon.RollAdditionalOptions();
 
    //메인 인터페이스
    MainViewer(MyWeapon);
@@ -32,24 +29,24 @@ int main()
            MainViewer(MyWeapon); // 메인 UI 렌더링
 
            // 입력 유도 문자 위치 지정
-           printW(2, 48, L"원하는 메뉴의 번호를 입력하세요: ");
+           printW(2, 57, L"원하는 메뉴의 번호를 입력하세요: ");
            int input;
            std::cin >> input;
 
            if (input == 1) {
-               // 1번 추가옵션 선택 시: 현재 무기의 추가옵션 상태를 복사하여 임시 보관하고 가챠 페이지로 이동
+               // 1번 추가옵션 선택 시: 현재 무기의 추가옵션 상태를 복사하여 임시 보관하고 페이지로 이동
                tempGachaStats.addOptions = MyWeapon.GetStats().addOptions;
                pageState = 1;
            }
            else if (input == 2) {
-               // 잠재능력 (현재 미구현 안내)
-               printW(2, 50, L"잠재능력 페이지는 현재 준비 중입니다.");
-               Sleep(1000);
+               // 잠재능력 
+               tempGachaStats.potential = MyWeapon.GetStats().potential;
+               pageState = 2; // 잠재능력 페이지로 전환
            }
            else if (input == 3) {
-               // 에디셔널 잠재능력 (현재 미구현 안내)
-               printW(2, 50, L"에디셔널 잠재능력 페이지는 현재 준비 중입니다.");
-               Sleep(1000);
+               // 에디셔널 잠재능력 
+               tempGachaStats.additionalPotential = MyWeapon.GetStats().additionalPotential;
+               pageState = 3;
            }
        }
        else if (pageState == 1) // [1: 추가옵션 설정 페이지 루프]
@@ -84,6 +81,53 @@ int main()
            {
                // 3. 이전으로 돌아가기 눌렀을 시
                // 원본 무기의 옵션은 그대로 유지한 채로 메인 화면으로 나감 (가챠 도중 나온 값 버림)
+               pageState = 0;
+           }
+       }
+       else if (pageState == 2) // 잠재능력 조작계 루프
+       {
+           PotentialPage(MyWeapon, tempGachaStats);
+           printW(2, 22, L"원하는 작업의 번호를 입력하세요: ");
+
+           int gachaInput;
+           std::cin >> gachaInput;
+
+           if (gachaInput == 1) {
+               // 1. 잠재능력 독립 가챠 무작위 실행
+               MyWeapon.RollPotential();
+               tempGachaStats.potential = MyWeapon.GetStats().potential;
+           }
+           else if (gachaInput == 2) {
+               // 2. 현재 옵션 최종 적용 후 메인화면 이전
+               MyWeapon.GetStats().potential = tempGachaStats.potential;
+               printW(2, 24, L"잠재능력이 무기에 성공적으로 각인되었습니다.");
+               Sleep(1000);
+               pageState = 0;
+           }
+           else if (gachaInput == 3) {
+               // 3. 적용 안 하고 그냥 나가기
+               pageState = 0;
+           }
+       }
+       else if (pageState == 3) // 에디셔널 잠재능력 조작계 루프
+       {
+           AdditionalPotentialPage(MyWeapon, tempGachaStats);
+           printW(2, 22, L"원하는 작업의 번호를 입력하세요: ");
+
+           int gachaInput;
+           std::cin >> gachaInput;
+
+           if (gachaInput == 1) {
+               MyWeapon.RollAdditionalPotential();
+               tempGachaStats.additionalPotential = MyWeapon.GetStats().additionalPotential;
+           }
+           else if (gachaInput == 2) {
+               MyWeapon.GetStats().additionalPotential = tempGachaStats.additionalPotential;
+               printW(2, 24, L"에디셔널 잠재능력이 성공적으로 적용되었습니다.");
+               Sleep(1000);
+               pageState = 0;
+           }
+           else if (gachaInput == 3) {
                pageState = 0;
            }
        }

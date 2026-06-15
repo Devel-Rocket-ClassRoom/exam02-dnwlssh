@@ -12,4 +12,6 @@ void MainViewer(const Weapon& weapon);
 
 // 추가옵션 인터페이스
 void DrawBottomTabs();
-void FlameOptionPage(Weapon& weapon, const WeaponStats& tempStats);
+void FlameOptionPage(Weapon& weapon, const WeaponStats& tempStats); // 추가옵션 페이지
+void PotentialPage(Weapon& weapon, const WeaponStats& tempStats);	// 잠재능력 페이지
+void AdditionalPotentialPage(Weapon& weapon, const WeaponStats& tempStats); // 에디셔널 페이지

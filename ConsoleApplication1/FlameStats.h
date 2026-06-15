@@ -4,14 +4,13 @@
 #include <vector>
 
 #include "StatType.h"
-
 #include "PrintW.h"
 #include "DrawBox.h"
 
 // 단일 옵션 정보를 담는 구조체 (잠재능력이나 추가옵션 한 줄을 표현)
 struct Option
 {
-	std::string OptionName;	// UI 출력용 텍스트 (예: "공격력 : +12%")
+	std::wstring OptionName;	// UI 출력용 텍스트 (예: "공격력 : +12%")
     StatType Type;				// 내부 계산용 스탯 타입
 	double Value;			// 수치 (정수, 실수 공용)
 };
