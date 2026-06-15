@@ -2,6 +2,7 @@
 #include "StatLine.h" 
 
 
+//모두 추가옵션이 생성되었을 떄, 줄을 생성하고 그렇지 않으면 줄을 생성하지 않는다
 double GetStatValueSafe(const std::map<StatType, double>& statMap, StatType type)
 {
     auto it = statMap.find(type);
@@ -67,6 +68,63 @@ void RenderWeaponStats(int startX, int startY, const Weapon& weapon)
     printW(startX, 39, L"강화불가");
 }
 
+// 메뉴 탭 함수
+void DrawBottomTabs()
+{
+    // Y=42 위치에 메뉴 상자 생성
+    DrawBox(2, 42, 55, 5);
+    printW(4, 44, L"1. 추가옵션   2. 잠재능력   3. 에디셔널 잠재능력");
+}
+
+// 추가옵션 전용 페이지 화면 구현
+// tempStats: 가챠 도중 실시간으로 바뀔 임시 추가옵션 상태를 보여주기 위함
+void FlameOptionPage(Weapon& weapon, const WeaponStats& tempStats)
+{
+    // 화면 초기화를 위해 기존 UI 영역을 공백으로 덮거나 system("cls") 처리
+    system("cls");
+
+    // 기본 무기 정보 틀 재렌더링
+    DrawBox(2, 2, 55, 15);
+    printW(4, 3, L"무기분류 : 아대(두손무기)");
+    printW(4, 4, L"공격속도 : 빠름(6단계)");
+
+    // 💡 현재 무기가 가진 오리지널 기본 스탯(baseStats)과 
+    // 매개변수로 전달받은 가챠 진행 중인 임시 추가옵션(tempStats.addOptions)을 조합하여 화면에 동적 출력
+    int currentY = 5;
+
+    static const std::vector<StatLine> displayOrder = {
+        { StatType::STR,         L"STR" }, { StatType::DEX,         L"DEX" },
+        { StatType::LUK,         L"LUK" }, { StatType::INT,         L"INT" },
+        { StatType::MaxHP,       L"최대 HP" }, { StatType::MaxMP,       L"최대 MP" },
+        { StatType::ReqLevel,    L"착용 레벨 감소" }, { StatType::DEF,         L"방어력" },
+        { StatType::ATT,         L"공격력" }, { StatType::M_ATT,       L"마력" },
+        { StatType::BossDMG,     L"보스 몬스터 공격 시 데미지", true },
+        { StatType::IDE,         L"몬스터 방어율 무시", true },
+        { StatType::Damage,      L"데미지", true }, { StatType::AllStat,     L"올스탯", true }
+    };
+
+    const WeaponStats& originalStats = weapon.GetStats();
+
+    for (const auto& line : displayOrder) {
+        StatType type = line.GetType();
+        double base = GetStatValueSafe(originalStats.baseStats, type);
+        // 무기 원본이 아닌, 현재 가챠로 돌아간 임시 옵션 맵에서 가져옵니다.
+        double add = GetStatValueSafe(tempStats.addOptions, type);
+
+        std::wstring textToPrint = line.GetFormattedText(base, add);
+        if (!textToPrint.empty()) {
+            printW(4, currentY, textToPrint.c_str());
+            currentY++;
+        }
+    }
+    printW(4, 15, L"강화불가");
+
+    // 하단 조작 버튼 탭 메뉴 출력
+    DrawBox(2, 18, 55, 6);
+    printW(4, 20, L"[추가옵션 설정]");
+    printW(4, 22, L"1. 재설정하기  2. 현재 옵션 선택(적용)  3. 이전으로");
+}
+
 void MainViewer(const Weapon& weapon)
 {
     //[메인 화면] 창 틀 생성
@@ -107,11 +165,8 @@ void MainViewer(const Weapon& weapon)
     DrawBox(2, 26, 55, 15);
     printW(4, 27, L"무기분류 : 아대(두손무기)");
     printW(4, 28, L"공격속도 : 빠름(6단계)");
-    //printW(4, 29, L"DEX : + ");
-    //printW(4, 30, L"LUK : + ");
-    //printW(4, 31, L"공력력 : + ");
-    //printW(4, 32, L"보스 몬스터 공격 시 데미지 +");
-    //printW(4, 33, L"몬스터 방어율 무시 : +");
-    //printW(4, 34, L"강화불가");
     RenderWeaponStats(4, 29, weapon);
+
+    DrawBottomTabs();
 }
+

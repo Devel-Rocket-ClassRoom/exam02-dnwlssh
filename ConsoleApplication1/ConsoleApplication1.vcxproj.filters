@@ -57,6 +57,9 @@
     <ClCompile Include="Weapon.cpp">
       <Filter>소스 파일\메인 무기 정보</Filter>
     </ClCompile>
+    <ClCompile Include="StatLine.cpp">
+      <Filter>소스 파일\인터페이스</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="메모.h">
@@ -85,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="StatLIne.h">
       <Filter>헤더 파일\인터페이스</Filter>
+    </ClInclude>
+    <ClInclude Include="잠재능력 확률표.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
